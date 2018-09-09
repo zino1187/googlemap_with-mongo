@@ -7,16 +7,85 @@
 <div id="map" style="width:100%;height:400px;"></div>
 
 <script>
-function myMap() {
-  var mapCanvas = document.getElementById("map");
-  var mapOptions = {
-    center: new google.maps.LatLng(51.5, -0.2), zoom: 20
-  };
-  var map = new google.maps.Map(mapCanvas, mapOptions);
+/*--------------------------------------------------------------------------
+마커 추가하기!!
+--------------------------------------------------------------------------*/
+function addMarker() {
+	//지도가 보여질 위치 지정 : 위도, 경도
+	var myCenter = new google.maps.LatLng(51.508742,-0.120850);
+
+	//container 지정
+	var mapCanvas = document.getElementById("map");
+	
+	//위에서 지정된 변수값들을 옵션에 등록 ( 추후 추가되는 속성들을 옵션에 등록할수있다)	
+	var mapOptions = {center: myCenter, zoom: 8};
+	
+	//지정된 컨테이너에 , 옵션을 적용하여 맵 생성!!
+	var map = new google.maps.Map(mapCanvas, mapOptions);
+	
+	//위에서 생성된 지도위에 마커를 추가한다
+	var marker = new google.maps.Marker({position:myCenter});
+	marker.setMap(map);
+}
+
+/*--------------------------------------------------------------------------
+에니메이션 추가하기!!
+--------------------------------------------------------------------------*/
+function aniMarker() {
+	//지도가 보여질 위치 지정 : 위도, 경도
+	var myCenter = new google.maps.LatLng(51.508742,-0.120850); 
+	
+	//컨테이너 지정
+	var mapCanvas = document.getElementById("map");
+
+	//위에서 지정된 변수값들을 옵션에 등록 ( 추후 추가되는 속성들을 옵션에 등록할수있다)	
+	var mapOptions = {center: myCenter, zoom: 5};
+
+	//맵 생성
+	var map = new google.maps.Map(mapCanvas,mapOptions);
+
+	//기존의 마커에 에니메이션 속성을 추가하면 된다..
+	var marker = new google.maps.Marker({
+		position: new google.maps.LatLng(51.508742,-0.120850),
+		animation: google.maps.Animation.BOUNCE
+	});
+	marker.setMap(map);
+}
+
+/*--------------------------------------------------------------------------
+정보창 띄우기
+--------------------------------------------------------------------------*/
+function addInfo() {
+	//위치 지정
+	var myCenter = new google.maps.LatLng(51.508742,-0.120850);
+	
+	//컨테이너 지정
+	var mapCanvas = document.getElementById("map");
+	
+	//옵션생성
+	var mapOptions = {center: myCenter, zoom: 5};
+
+	//맵 생성
+	var map = new google.maps.Map(mapCanvas, mapOptions);
+
+	for(var i=0;i<10;i++){
+		//마커생성
+		var marker = new google.maps.Marker({
+			position:new google.maps.LatLng(51.50874+i,-(0.12085+i)),
+			animation: google.maps.Animation.BOUNCE
+		});
+		marker.setMap(map);
+
+		//정보창 생성
+		var infowindow = new google.maps.InfoWindow({
+			content: "여기 "+i+"번째 맛집!!"
+		});
+		infowindow.open(map,marker);
+	}
 }
 </script>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCbl3_LwfKGUJBJRaZ6W80TxtFRj-WpE3U&callback=myMap"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCbl3_LwfKGUJBJRaZ6W80TxtFRj-WpE3U&callback=aniMarker"></script>
 <!--
 To use this code on your website, get a free API key from Google.
 Read more at: https://www.w3schools.com/graphics/google_maps_basic.asp

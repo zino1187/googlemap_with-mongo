@@ -36,7 +36,9 @@ $(function(){
 
 	$("#bt_result").click(function(){
 		//ifame을 새로고침 하자!
-		window.frames["myFrame"].location.reload();
+		//window.frames["myFrame"].location.reload();
+		getList();
+
 	});
 
 	for(var i=1;i<=4;i++){
@@ -107,16 +109,23 @@ function regist(){
 	
 	});
 }
+
+function getList(){
+	$.get("/map/list", function(data, status){
+	});
+
+}
 </script>
 </head>
 <body>
-
 <div class="wrapper">
 	<div class="regist">
 		<form name="myForm">
 			<input type="hidden" name="selectedIcon">
-			<input type="text" placeholder="위도 입력..." name="lat">
-			<input type="text" placeholder="경도 입력..." name="lng">
+			<input type="text" placeholder="위도 입력..."		name="lat">
+			<input type="text" placeholder="경도 입력..."		name="lng">
+			<input type="text" placeholder="메세지 입력..."	name="msg">
+
 			<div id="icons">
 				<img src="./images/arrow.png"		id="1" name="icon">
 				<img src="./images/cloud.png"		id="2" name="icon">

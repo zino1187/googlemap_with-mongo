@@ -48,12 +48,13 @@ app.use("/map/regist", function(request, response){
 
 //목록 가져오기 
 app.use("/map/list", function(request, response){
+
 	client.connect("mongodb://localhost:27017/", function(error, con){
 		if(error){
 			console.log(error);
 		}else{
 			var db=con.db("front");
-			db.collection("googlemap").find({}, function(err, result){
+			db.collection("googlemap").find().toArray(function(err, result){
 				if(err){
 					console.log(err);
 				}else{
