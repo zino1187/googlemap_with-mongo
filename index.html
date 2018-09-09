@@ -35,10 +35,8 @@ $(function(){
 	});
 
 	$("#bt_result").click(function(){
-		//ifame을 새로고침 하자!
-		//window.frames["myFrame"].location.reload();
 		getList();
-
+		window.frames["myFrame"].location.reload();//ifame을 새로고침 하자!
 	});
 
 	for(var i=1;i<=4;i++){
@@ -104,7 +102,8 @@ function regist(){
 	$.post("/map/regist", {
 			lat:myForm.lat.value,	
 			lng:myForm.lng.value,
-			selectedIcon:myForm.selectedIcon.value
+			selectedIcon:myForm.selectedIcon.value,
+			msg:myForm.msg.value
 		} , function(data, status){
 	
 	});
@@ -112,6 +111,7 @@ function regist(){
 
 function getList(){
 	$.get("/map/list", function(data, status){
+		
 	});
 
 }
@@ -137,7 +137,7 @@ function getList(){
 		<button id="bt_result">결과보기</button>
 	</div>
 	<div id="frame">
-		<iframe name="myFrame" src="test.html" width="100%" height="100%"/>
+		<iframe name="myFrame" src="/map/list" width="100%" height="100%"/>
 	</div>
 </div>
 

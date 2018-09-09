@@ -68,10 +68,10 @@ function addInfo() {
 	//맵 생성
 	var map = new google.maps.Map(mapCanvas, mapOptions);
 
-	for(var i=0;i<10;i++){
+	for(var i=1;i<10;i++){
 		//마커생성
 		var marker = new google.maps.Marker({
-			position:new google.maps.LatLng(51.50874+i,-(0.12085+i)),
+			position:new google.maps.LatLng(51.50874+i,-0.12085+i),
 			animation: google.maps.Animation.BOUNCE
 		});
 		marker.setMap(map);
@@ -83,9 +83,39 @@ function addInfo() {
 		infowindow.open(map,marker);
 	}
 }
+
+function addIcon() {
+	var myCenter = new google.maps.LatLng(51.508742,-0.120850); 
+	var mapCanvas = document.getElementById("map");
+	var mapOptions = {center: myCenter, zoom: 5};
+	var map = new google.maps.Map(mapCanvas,mapOptions);
+	
+	for(var i=0;i<5;i++){		
+		//아이콘 객체
+		var myIcon = {
+			url: "./images/smile.png", // url
+			scaledSize: new google.maps.Size(30, 30), // scaled size
+			origin: new google.maps.Point(0,0), // origin
+			anchor: new google.maps.Point(0, 0) // anchor
+		};
+
+		var marker = new google.maps.Marker({
+			position: new google.maps.LatLng(51.508742+i,-(0.120850+i)),
+			animation: google.maps.Animation.BOUNCE,
+			icon: myIcon
+		});
+		marker.setMap(map);
+
+		//정보창 생성
+		var infowindow = new google.maps.InfoWindow({
+		content: "여기 "+i+"번째 맛집!!"
+		});
+		infowindow.open(map,marker);
+	}
+}
 </script>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCbl3_LwfKGUJBJRaZ6W80TxtFRj-WpE3U&callback=aniMarker"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCbl3_LwfKGUJBJRaZ6W80TxtFRj-WpE3U&callback=addIcon"></script>
 <!--
 To use this code on your website, get a free API key from Google.
 Read more at: https://www.w3schools.com/graphics/google_maps_basic.asp
