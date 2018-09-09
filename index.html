@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<style>
+.wrapper{
+	width:100%;
+	height:600px;
+	background:yellow;
+	overflow:hidden;
+}
+.regist{
+	width:15%;
+	height:100%;
+	float:left;
+}
+#frame{
+	width:85%;
+	height:100%;
+	background:red;
+	float:left;
+}
+#icons > img{
+	width:60px;
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+var selectedImg=0;
+
+$(function(){
+	$("#bt_regist").click(function(){
+		regist();
+	});
+
+	$("#bt_result").click(function(){
+		//ifame을 새로고침 하자!
+		window.frames["myFrame"].location.reload();
+	});
+
+	for(var i=1;i<=4;i++){
+		$("#icons img:nth-child("+i+")").click(function(){
+			//alert($(this).attr("src"));	
+			//테두리를 부여해서 직관적으로 선택여부를 알게하자!!
+			selectedImg=parseInt($(this).attr("id"));
+			setBorder(); //이미지에 테두리...
+		});
+	}
+
+});
+
+//존재하는 이미지들을 대상으로 , 현재 선택한 숫자랑 비교하여 
+//같은 숫자의 이미지는 보더를 준다...
+function setBorder(){
+	var icon=document.getElementsByName("icon");
+
+	for(var i=0;i<icon.length;i++){
+		
+		if(selectedImg==(i+1)){//일치한다면...아까 선택한 이미지임..
+			$(icon[i]).css({
+				border:"3px solid red"
+			});
+		}else{
+			$(icon[i]).css({
+				border:"0px"
+			});
+		}
+	}
+}
+
+//유효성 체크하고서 서버에 전송
+function regist(){
+	if(!myForm.lat.value){
+		alert("위도를 입력해 주세요");
+		myForm.lat.focus();
+		return;
+	}
+	if(!myForm.lng.value){
+		alert("경도를 입력해 주세요");
+		myForm.lng.focus();
+		return;
+	}
+	if(selectedImg==0){
+		alert("아이콘을 선택해주세요");
+		return;
+	}	
+	//히든값에 이미지명을 대입...
+	var str=document.getElementById(selectedImg).src;
+	var lastIndex=str.lastIndexOf("/");
+	myForm.selectedIcon.value=str.substring(lastIndex+1, str.length);
+
+	alert(myForm.selectedIcon.value);
+	
+	/*
+	myForm.method="post";
+	myForm.action="/map/regist"; //url
+	myForm.submit();
+	*/
+
+	//jquery가 지원하는 ajax 
+	$.post("/map/regist", {
+			lat:myForm.lat.value,	
+			lng:myForm.lng.value,
+			selectedIcon:myForm.selectedIcon.value
+		} , function(data, status){
+	
+	});
+}
+</script>
+</head>
+<body>
+
+<div class="wrapper">
+	<div class="regist">
+		<form name="myForm">
+			<input type="hidden" name="selectedIcon">
+			<input type="text" placeholder="위도 입력..." name="lat">
+			<input type="text" placeholder="경도 입력..." name="lng">
+			<div id="icons">
+				<img src="./images/arrow.png"		id="1" name="icon">
+				<img src="./images/cloud.png"		id="2" name="icon">
+				<img src="./images/finger.png"		id="3" name="icon">
+				<img src="./images/smile.png"		id="4" name="icon">
+			</div>
+		</form>
+		<button id="bt_regist">등록하기</button>
+		<button id="bt_result">결과보기</button>
+	</div>
+	<div id="frame">
+		<iframe name="myFrame" src="test.html" width="100%" height="100%"/>
+	</div>
+</div>
+
+</body>
+</html>
