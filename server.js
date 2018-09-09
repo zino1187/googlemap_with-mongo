@@ -117,7 +117,7 @@ app.use("/map/delete", function(request ,response){
 
 			var db=con.db("front");
 			
-			db.collection("googlemap").deleteMany({_id:_id}, function(err,result){
+			db.collection("googlemap").deleteOne({_id:_id}, function(err,result){
 				if(err){ 
 					console.log(err);//쿼리문 수행이 안된게 아니라 ,문법이나,
 					//기타 이유로 인해 에러가 난 경우를 말한다...
