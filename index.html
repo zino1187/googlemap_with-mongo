@@ -24,6 +24,11 @@
 #icons > img{
 	width:60px;
 }
+#sel{
+	width:99%;
+	height:300px;
+	margin:20px 0px;
+}
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
@@ -47,6 +52,10 @@ $(function(){
 			setBorder(); //이미지에 테두리...
 		});
 	}
+
+	$("#bt_del").click(function(){
+		del();
+	});
 
 });
 
@@ -110,10 +119,54 @@ function regist(){
 }
 
 function getList(){
+	//구글맵 갱신
 	$.get("/map/list", function(data, status){
+	});
+	
+	//select 박스에 채워질 데이터
+	$.get("/map/data", function(data, status){
+		//서버에서 레코드들을 넘겨받아, select박스를 구성해본다!!
+		alert("서버가 보낸 데이터는 "+data);
+
+		//서버에서 전송된 데이터는 문자열이므로, 다시 Json 객체로 복원화
+		var array=JSON.parse(data);
 		
+		//select 박스에 반복문으로 데이터 출력!!!
+		var sel=document.getElementById("sel");
+		
+		//option을 add 하기전에 기존에 존재하고 있던 자식option 요소들을 모두 제거!!
+		var n=sel.options.length;
+		for(var i=0;i<n;i++){
+			sel.remove(0); //동적 삭제시 index 주의하자!!!
+		}
+
+		for(var i=0;i<array.length;i++){
+			var obj=array[i];//배열에서 json 객체 하나 추출!!
+
+			var op=document.createElement("option");
+			op.value=obj._id;	//5b94840330ba0d2028fbcc6e
+			op.text=obj.msg;	//신사역
+			sel.add(op);
+		}
 	});
 
+
+}
+
+//지역삭제 처리
+function del(){
+	var _id=$("#sel").val();
+
+	if(confirm("선택하신 "+_id+" 지역을 삭제하시겠습니까?")){
+		
+		$.get("/map/delete",{_id:_id}, function(data, status){
+			if(data=="ok"){
+				alert("삭제되었습니다.");
+			}else{
+				alert("삭제실패ㅜㅜ");
+			}
+		});
+	}
 }
 </script>
 </head>
@@ -127,7 +180,7 @@ function getList(){
 			<input type="text" placeholder="메세지 입력..."	name="msg">
 
 			<div id="icons">
-				<img src="./images/arrow.png"		id="1" name="icon">
+				<img src="./images/arrow.png"	id="1" name="icon">
 				<img src="./images/cloud.png"		id="2" name="icon">
 				<img src="./images/finger.png"		id="3" name="icon">
 				<img src="./images/smile.png"		id="4" name="icon">
@@ -135,7 +188,15 @@ function getList(){
 		</form>
 		<button id="bt_regist">등록하기</button>
 		<button id="bt_result">결과보기</button>
+
+		<select id="sel" multiple>
+			<option>사과</option>
+			<option>오렌지</option>
+			<option>딸기</option>
+		</select>
+		<button id="bt_del">삭제</button>
 	</div>
+
 	<div id="frame">
 		<iframe name="myFrame" src="/map/list" width="100%" height="100%"/>
 	</div>
